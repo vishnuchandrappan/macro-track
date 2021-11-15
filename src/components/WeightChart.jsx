@@ -28,7 +28,10 @@ export const WeightChart = ({ data: trackingData }) => {
     yField: "weight",
     point: {
       size: 5,
-      shape: "diamond",
+      shape: "round",
+    },
+    lineShape: {
+      connectNulls: true,
     },
   };
 

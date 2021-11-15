@@ -40,8 +40,9 @@ export const getDates = (startDate, stopDate, availableDates = []) => {
           }
         : {
             date: today,
-            weight: availableDates.find((dates) => dates.date === today)
-              ?.weight,
+            weight: parseInt(
+              availableDates.find((dates) => dates.date === today)?.weight
+            ),
           }
     );
     currentDate = currentDate.add(1, "days");

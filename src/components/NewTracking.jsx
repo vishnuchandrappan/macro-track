@@ -4,12 +4,13 @@ import { useState, useContext } from "react";
 import { useFirestore } from "reactfire";
 import { AuthContext } from "../services/AuthService";
 
-export const NewTracking = ({ visible, onClose }) => {
+export const NewTracking = ({ visible, onClose, data }) => {
   const dateFormat = "DD/MM/YYYY";
   const [loading, setLoading] = useState(false);
   const { username } = useContext(AuthContext);
   const fireStore = useFirestore().collection(username);
   const [date, setDate] = useState(moment(new Date()).format(dateFormat));
+  const [initialValues, setInitialValues] = useState({});
 
   const handleSubmit = async (values) => {
     setLoading(true);
@@ -26,6 +27,20 @@ export const NewTracking = ({ visible, onClose }) => {
     setLoading(false);
   };
 
+  const handleDateChange = (_, date) => {
+    setDate(date);
+    setInitialValues(async () => {
+      let temp = await data.find((item) => item.date === date);
+      if (temp) {
+        delete temp.date;
+        delete temp.created_at;
+      } else {
+        temp = {};
+      }
+      return temp;
+    });
+  };
+
   return (
     <Drawer
       title="Basic Drawer"
@@ -39,10 +54,7 @@ export const NewTracking = ({ visible, onClose }) => {
         wrapperCol={{ span: 16 }}
         initialValues={{
           date: moment(new Date(), dateFormat),
-          steps: 12000,
-          carbs: 375,
-          protein: 160,
-          fat: 50,
+          ...initialValues,
         }}
         onFinish={handleSubmit}
       >
@@ -53,9 +65,7 @@ export const NewTracking = ({ visible, onClose }) => {
         >
           <DatePicker
             style={{ width: "100%" }}
-            onChange={(_, date) => {
-              setDate(date);
-            }}
+            onChange={handleDateChange}
             format={dateFormat}
           />
         </Form.Item>

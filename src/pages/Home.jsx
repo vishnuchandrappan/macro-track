@@ -15,7 +15,7 @@ export const Home = () => {
   useEffect(() => {
     let total = 0;
     data.forEach(({ steps }) => {
-      total += steps;
+      total += parseInt(steps);
     });
     setTotalSteps(total);
   }, [data]);
@@ -48,7 +48,7 @@ export const Home = () => {
       </Card>
 
       <DataTable data={data} />
-      <NewTracking visible={showModal} onClose={toggleModal} />
+      <NewTracking data={data} visible={showModal} onClose={toggleModal} />
     </div>
   );
 };
